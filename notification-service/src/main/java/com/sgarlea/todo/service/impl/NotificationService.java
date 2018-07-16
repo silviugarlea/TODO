@@ -2,6 +2,7 @@ package com.sgarlea.todo.service.impl;
 
 import com.sgarlea.todo.domain.Notification;
 import com.sgarlea.todo.domain.Task;
+import com.sgarlea.todo.exception.NoResourceException;
 import com.sgarlea.todo.repository.INotificationRepository;
 import com.sgarlea.todo.service.INotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class NotificationService implements INotificationService {
             notification.setTask(task);
             return notificationRepository.save(notification);
         }
-        return null;
+        throw new NoResourceException("No notification for task: " + taskId);
     }
 
     @Override
@@ -39,6 +40,7 @@ public class NotificationService implements INotificationService {
         if (notification != null) {
             notificationRepository.delete(notification);
         }
+        throw new NoResourceException("No notification for taskL " + taskId);
     }
 
     @Override
@@ -49,6 +51,6 @@ public class NotificationService implements INotificationService {
             notificationRepository.save(notification);
             return notification;
         }
-        return null;
+        throw new NoResourceException("No notification for taskL " + taskId);
     }
 }

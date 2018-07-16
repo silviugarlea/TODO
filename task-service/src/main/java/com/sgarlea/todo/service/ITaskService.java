@@ -10,13 +10,13 @@ public interface ITaskService {
 
     List<Task> findAll();
 
-    List<Task> findArchive();
-
     Task find(String id);
 
     Task save(String id, Task task);
 
     void delete(String id);
+
+    List<Task> findArchive();
 
     Task archive(String id);
 
