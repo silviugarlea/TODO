@@ -1,10 +1,12 @@
 package com.sgarlea.todo.service.impl;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.sgarlea.todo.client.NotificationClient;
 import com.sgarlea.todo.domain.Task;
 import com.sgarlea.todo.domain.TaskStatus;
 import com.sgarlea.todo.exception.InvalidResourceException;
 import com.sgarlea.todo.exception.NoResourceException;
+import com.sgarlea.todo.exception.ServiceUnavaibleException;
 import com.sgarlea.todo.repository.ITaskRepository;
 import com.sgarlea.todo.service.ITaskService;
 import com.sgarlea.todo.service.util.DateAdapter;
@@ -36,6 +38,7 @@ public class TaskService implements ITaskService {
     }
 
     @Override
+    @HystrixCommand(fallbackMethod = "defaultAdd")
     public Task add(Task task) {
         taskValidator.validate(task);
         Task newTask = taskRepository.insert(task);
@@ -43,6 +46,10 @@ public class TaskService implements ITaskService {
             notificationClient.createNotification(newTask);
         }
         return newTask;
+    }
+
+    private Task defaultAdd(Task task) {
+        throw new ServiceUnavaibleException("Service unavailable. Cannot add task.");
     }
 
     @Override
@@ -57,6 +64,7 @@ public class TaskService implements ITaskService {
     }
 
     @Override
+    @HystrixCommand(fallbackMethod = "defaultSave")
     public Task save(String id, Task task) {
         taskRepository.findById(id).orElseThrow(() -> new NoResourceException("Task not found: " + id));
         taskValidator.validate(task);
@@ -65,10 +73,19 @@ public class TaskService implements ITaskService {
         return updatedTask;
     }
 
+    private Task defaultSave(String id, Task task) {
+        throw new ServiceUnavaibleException("Service unavailable. Cannot save task.");
+    }
+
     @Override
+    @HystrixCommand(fallbackMethod = "defaultDelete")
     public void delete(String id) {
         taskRepository.deleteById(id);
         notificationClient.deleteNotification(id);
+    }
+
+    private void defaultDelete(String id) {
+        throw new ServiceUnavaibleException("Service unavailable. Cannot delete task.");
     }
 
     @Override
@@ -77,13 +94,19 @@ public class TaskService implements ITaskService {
     }
 
     @Override
+    @HystrixCommand(fallbackMethod = "defaultChangeStatus")
     public Task archive(String id) {
         Task task = updateStatus(id, TaskStatus.ARCHIVED);
         notificationClient.deactivateNotification(id);
         return task;
     }
 
+    private Task defaultChangeStatus(String id) {
+        throw new ServiceUnavaibleException("Service unavailable. Cannat archive task.");
+    }
+
     @Override
+    @HystrixCommand(fallbackMethod = "defaultChangeStatus")
     public Task restore(String id) {
         Task task = updateStatus(id, TaskStatus.ACTIVE);
         if (shouldNotify(task)) {
@@ -93,6 +116,7 @@ public class TaskService implements ITaskService {
     }
 
     @Override
+    @HystrixCommand(fallbackMethod = "defaultChangeStatus")
     public Task complete(String id) {
         Task task = updateStatus(id, TaskStatus.COMPLETED);
         notificationClient.deactivateNotification(id);
@@ -108,6 +132,9 @@ public class TaskService implements ITaskService {
     }
 
     private Boolean shouldNotify(Task task) {
+        if (task.getDueDate() == null) {
+            return Boolean.FALSE;
+        }
         Long daysTillNotification = dateAdapter.computeDaysBetween(task.getDueDate(), new Date());
         return daysTillNotification <= 3;
     }

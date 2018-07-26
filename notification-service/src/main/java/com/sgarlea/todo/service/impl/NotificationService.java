@@ -31,7 +31,7 @@ public class NotificationService implements INotificationService {
             notification.setTask(task);
             return notificationRepository.save(notification);
         }
-        throw new NoResourceException("No notification for task: " + taskId);
+        return null;
     }
 
     @Override
@@ -40,7 +40,6 @@ public class NotificationService implements INotificationService {
         if (notification != null) {
             notificationRepository.delete(notification);
         }
-        throw new NoResourceException("No notification for taskL " + taskId);
     }
 
     @Override
@@ -51,6 +50,6 @@ public class NotificationService implements INotificationService {
             notificationRepository.save(notification);
             return notification;
         }
-        throw new NoResourceException("No notification for taskL " + taskId);
+        return null;
     }
 }

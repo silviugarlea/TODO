@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 public class NotificationAdapter {
 
     public NotificationResource createResource(Notification notification) {
+        if (notification == null) {
+            return null;
+        }
         return new NotificationResource().setNotificationId(notification.getId())
                 .setTaskId(notification.getTask().getId())
                 .setActive(notification.getActive());

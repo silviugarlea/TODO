@@ -3,6 +3,8 @@ server:
 management:
   endpoints:
     web:
+      exposure:
+        include: hystrix.stream, health, info
       path-mapping:
         health: healthcheck
 spring:
@@ -24,3 +26,22 @@ eureka:
     healthcheck:
       enabled: true
     registryFetchIntervalSeconds: 5
+hystrix:
+  threadpool:
+    getData:
+      core: 20
+      allowMaximumSizeToDivergeFromCoreSize: true
+      maximumSize: 100
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
+ribbon:
+  eureka:
+    enabled: true
+  MaxAutoRetries: 3
+  MaxAutoRetriesNextServer: 3
+  ConnectTimeout: 2500
+  ReadTimeout: 2500

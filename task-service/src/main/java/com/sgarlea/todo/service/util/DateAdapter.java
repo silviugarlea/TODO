@@ -9,7 +9,7 @@ import java.util.Date;
 @Component
 public class DateAdapter {
 
-    private static final String DEFAULT_DATE_FORMAT = "";
+    private static final String DEFAULT_DATE_FORMAT = "dd-MM-yyyy";
 
     public Long computeDaysBetween(Date first, Date second) {
         Long timeDifference = first.getTime() - second.getTime();
