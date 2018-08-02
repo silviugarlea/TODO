@@ -3,5 +3,5 @@ spring:
     name: monitoring-service
 turbine:
   aggregator:
-    clusterConfig: NOTIFICATION-SERVICE
-  appConfig: notification-service
+    clusterConfig: TASK-SERVICE
+  appConfig: task-service

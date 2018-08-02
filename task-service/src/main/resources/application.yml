@@ -7,6 +7,7 @@ management:
         include: hystrix.stream, health, info
       path-mapping:
         health: healthcheck
+      base-path: /
 spring:
   data:
     mongodb:
