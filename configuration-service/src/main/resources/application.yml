@@ -1,0 +1,8 @@
+server:
+  port: 8888
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: file:///D:/Mentorship/Microservices/TODO_Configuration_Repository/
