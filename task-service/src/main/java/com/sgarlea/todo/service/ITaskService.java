@@ -24,4 +24,6 @@ public interface ITaskService {
 
     Task complete(String id);
 
+    void removeAll();
+
 }

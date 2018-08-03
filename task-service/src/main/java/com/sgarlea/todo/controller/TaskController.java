@@ -95,4 +95,10 @@ public class TaskController {
         return new ResponseEntity<>(resource, HttpStatus.OK);
     }
 
+    @DeleteMapping(path = "delete-all")
+    public ResponseEntity<Void> deleteAll() {
+        taskService.removeAll();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

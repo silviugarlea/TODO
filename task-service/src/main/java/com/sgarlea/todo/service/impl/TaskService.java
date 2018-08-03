@@ -123,6 +123,12 @@ public class TaskService implements ITaskService {
         return task;
     }
 
+    @Override
+    public void removeAll() {
+        notificationClient.removeAll();
+        taskRepository.deleteAll();
+    }
+
     private Task updateStatus(String id, TaskStatus status) {
         Task task = taskRepository.findById(id).orElseThrow(() -> new NoResourceException("Task not found: " + id));
         if (!TaskStatus.COMPLETED.equals(task.getStatus())) {

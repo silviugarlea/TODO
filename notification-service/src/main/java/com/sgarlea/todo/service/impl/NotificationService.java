@@ -52,4 +52,9 @@ public class NotificationService implements INotificationService {
         }
         return null;
     }
+
+    @Override
+    public void removeAll() {
+        notificationRepository.deleteAll();
+    }
 }

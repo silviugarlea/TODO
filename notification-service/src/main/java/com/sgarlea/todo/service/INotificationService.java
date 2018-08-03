@@ -12,4 +12,6 @@ public interface INotificationService {
     void remove(String taskId);
 
     Notification toggleActivation(String taskId, Boolean active);
+
+    void removeAll();
 }

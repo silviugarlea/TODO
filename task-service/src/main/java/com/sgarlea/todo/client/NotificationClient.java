@@ -27,4 +27,7 @@ public interface NotificationClient {
     @RequestMapping(method = RequestMethod.PUT, path = "/notifications/{taskId}/deactivate")
     ResponseEntity<Object> deactivateNotification(@PathVariable("taskId") String taskId);
 
+    @RequestMapping(method = RequestMethod.DELETE, path = "/notifications/delete-all")
+    ResponseEntity<Object> removeAll();
+
 }

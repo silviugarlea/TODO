@@ -61,4 +61,10 @@ public class NotificationController {
         return new ResponseEntity<>(resource, HttpStatus.OK);
     }
 
+    @DeleteMapping(path = "/notifications/delete-all")
+    public ResponseEntity<Void> deleteAllNotifications() {
+        notificationService.removeAll();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
